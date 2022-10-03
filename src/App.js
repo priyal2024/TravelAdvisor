@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Header, List, Map } from "./components/index";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
+import Alert from '@material-ui/lab/Alert';
 import { getPlacesData } from "./api/index";
 
 function App() {
@@ -24,9 +25,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const filteredPlace = placesData.filter((place) => place.rating > rating);
+    const filteredPlace = placesData?.filter((place) => place.rating > rating);
     setFilteredPlaces(filteredPlace);
-  }, [rating]);
+  }, [rating, placesData]);
 
 
   useEffect(() => {
@@ -36,6 +37,8 @@ function App() {
         setPlacesData(data?.filter((place) => place.name && place.num_reviews > 0));
         setFilteredPlaces([]);
         setIsLoading(false);
+      }).catch((error) => {
+        <Alert severity="error">{error.data}!</Alert>
       });
     }
   }, [type, bounds]);
